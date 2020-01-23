@@ -1464,8 +1464,8 @@ function draw_clock(cr, t)
 end
 
 function degreeToCardinal(deg)
-    directions = {"N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"}
-    closestDeg = round((deg % 360) / 45)
+    directions = {"N", "NE", "E", "SE", "S", "SW", "W", "NW", "N", ""}
+    closestDeg = deg ~= nil and round((deg % 360) / 45) or 10
     return directions[closestDeg+1]
 end
 

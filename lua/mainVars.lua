@@ -215,11 +215,11 @@ texts = {
 
   -- base wanikani reviews
   {
-    text = 'WK r:' .. wanikani.reviewsNow .. ' l:' .. wanikani.lessonsNow .. ' n:' .. parseWKDateToHour(wanikani.nextAvailAt),
+    text = ((wanikani.userLevel > 0) and wanikani.userLevel or "WK") .. ' r:' .. wanikani.reviewsNow .. ' l:' .. wanikani.lessonsNow .. ' n:' .. parseWKDateToHour(wanikani.nextAvailAt),
     xr = 325,
     yc = 40,
     font = 'Source Code Pro',
-    size = 10,
+    size = 12,
     color = wanikani.reviewsNow > 0 and {color.roseGold, 1} or wanikani.lessonsNow > 0 and {color.gentooGreen, 1} or {color.white, 0.75},
     --color = {color.white, 0.75},
   },

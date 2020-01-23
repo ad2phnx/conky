@@ -59,11 +59,11 @@ hourText = {
 }
 
 wkReviews = {
-  text = 'WK:',
+  text = '',
   xc = cCenter.x - 400,
   yc = cCenter.y - cHeight / 4,
   font = 'Square Sans Serif 7',
-  size = 16,
+  size = 12,
   color = {color.roseGold, 1},
 }
 
@@ -97,7 +97,7 @@ texts = {
     yc = cCenter.y - cHeight /4,
     font = 'HakusyuKaisyoExtraBold_kk',
     size = 172,
-    color = {weekdayColor[tonumber(time.weekday)], 0.2},
+    color = {weekdayColor[tonumber(time.weekday)], 0.4},
   },
 
   -- Time
@@ -111,14 +111,14 @@ texts = {
   },
 
   -- base wanikani level
-  {
-    text = (wanikani.userLevel > 0) and wanikani.userLevel or "0",
-    xc = cCenter.x - 400,
-    yc = cCenter.y - cHeight / 4,
-    font = 'Japan',
-    size = 48,
-    color = {color.roseGold, 0.5},
-  },
+  --{
+  --  text = (wanikani.userLevel > 0) and wanikani.userLevel or "0",
+  --  xc = cCenter.x - 400,
+  --  yc = cCenter.y - cHeight / 4,
+  --  font = 'Japan',
+  --  size = 48,
+  --  color = {color.roseGold, 0.5},
+  --},
 }
 
 rings = {

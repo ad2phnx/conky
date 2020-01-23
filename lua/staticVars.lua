@@ -136,14 +136,11 @@ yearKanji = '令和'
 
 --[[Weather]]--
 sWeather = {
-  id = '1850147',
-  --loc = 'JAXX0085',
+  --id = '1850144',   -- Tokyo-to
+  --id = '1850147', -- Tokyo
+  id = '1864529',   -- Chiyoda-ku
   units = 'metric',
   lang = 'ja',
-  --dayf = '8',
-  --lat = '35.67',
-  --lon = '139.77',
-  --tz = '9',
 }
 
 --[[Calendar]]--

@@ -164,6 +164,6 @@ calendar = {
 
   -- info
   displayInfoBox = true,
-  displayEmptyInfoBox = false,
+  displayEmptyInfoBox = true,
   calendarFile = "/home/adinis/.config/gen2con/lua/calendar.txt",
 }

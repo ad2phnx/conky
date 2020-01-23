@@ -1,4 +1,34 @@
+-- base line forecast/calendar connector
+baseLine = {
+  x = cCenter.x,
+  y = cCenter.y - 550,
+  tox = cCenter.x,
+  toy = cCenter.y,
+  color = {color.white, 0.25},
+  width = 34,
+}
 
+-- base forecast text
+fcastText = {
+  text = 'testing',
+  xc = cCenter.x - 400,
+  yc = cCenter.y + 50,
+  --font = 'Source Code Pro',
+  --font = 'HakusyuKaisyoExtraBold_kk',
+  font = 'Kochi Mincho',
+  --font = 'Sazanami Mincho',
+  size = 12,
+  color = {color.white, 0.75},
+}
+
+-- base forecast images
+fcastImg = {
+  x = cCenter.x,
+  y = cCenter.y - 550,
+  w = 48,
+  h = 48,
+  file = '/home/adinis/.config/gen2con/weather/NA.png',
+}
 
 -- images
 images = {
@@ -11,6 +41,15 @@ images = {
         h = 128,
         file = '/home/adinis/.config/gen2con/weather/' .. ((weather ~= nil and weather['weather'] ~= nil) and weather['weather'][1]['icon'] .. '@2x' or 'NA') .. '.png',
         --file = weatherIcons.currentIcon:read('*a'),
+    },
+
+    -- Globe position
+    {
+        x = cCenter.x - 400,
+        y = cCenter.y - cHeight / 4,
+        w = 96,
+        h = 96,
+        file = '/home/adinis/.tmp/earth/earth-out.png',
     },
 }
 
@@ -144,30 +183,30 @@ pies = {
 boxes = {
 
       -- clock bg
-      {
-        x = cCenter.x - 400 - 175 - 1,
-        y = cCenter.y - cHeight / 4 - 225,
-        w = 350,
-        h = 450,
-        scaleX = 1,
-        scaleY = 1,
-        corners = {{'circle', 2}},
-        color = {{0, monthColor[tonumber(time.month)], 0.1}},
-        border = 0,
-      },
+      --{
+      --  x = cCenter.x - 400 - 175 - 1,
+      --  y = cCenter.y - cHeight / 4 - 225,
+      --  w = 350,
+      --  h = 450,
+      --  scaleX = 1,
+      --  scaleY = 1,
+      --  corners = {{'circle', 2}},
+      --  color = {{0, monthColor[tonumber(time.month)], 0.1}},
+      --  border = 0,
+      --},
 
       -- calendar bg
-      {
-        x = cCenter.x - 400 - 175 - 1,
-        y = cCenter.y + cHeight / 4 - 225,
-        w = 350,
-        h = 450,
-        scaleX = 1,
-        scaleY = 1,
-        corners = {{'circle', 2}},
-        color = {{0, monthCompliment[tonumber(time.month)], 0.1}},
-        border = 0,
-      },
+      --{
+      --  x = cCenter.x - 400 - 175 - 1,
+      --  y = cCenter.y + cHeight / 4 - 225,
+      --  w = 350,
+      --  h = 450,
+      --  scaleX = 1,
+      --  scaleY = 1,
+      --  corners = {{'circle', 2}},
+      --  color = {{0, monthCompliment[tonumber(time.month)], 0.1}},
+      --  border = 0,
+      --},
 
       -- weather bg
       {
@@ -353,6 +392,18 @@ texts = {
         color = {color.white, 0.75},
     },
 
+    {
+        text = (weather ~= nil and weather['weather']) and weather['weather'][1]['description'],
+        xc = 175,
+        yc = 850,
+        --font = 'HakusyuKaisyoExtraBold_kk',
+        font = 'Kochi Mincho',
+        --font = 'Sazanami Mincho',
+        face = CAIRO_FONT_WEIGHT_BOLD,
+        size = 18,
+        color = {color.white, 0.75},
+    },
+
     -- last update
     {
         text = (weather ~= nil and weather['dt'] ~= nil) and os.date("%H:%M", weather['dt']) or '',
@@ -372,17 +423,28 @@ texts = {
     {
         text = 'Feels Like',
         x = 25,
-        yc = 865,
+        yc = 860,
         font = 'Square Sans Serif 7',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
-        color = {color.curiousBlue, 1},
+        color = {weekdayColor[time.weekday], 1},
+    },
+
+    {
+        text = '░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░',
+        xc = 175,
+        yc = 860,
+        --font = 'Square Sans Serif 7',
+        font = 'Source Code Pro',
+        face = CAIRO_FONT_WEIGHT_BOLD,
+        size = 10,
+        color = {color.white, 0.5},
     },
 
     {
         text = (weather ~= nil and weather['main'] ~= nil) and weather['main']['feels_like'] .. '°C' or '',
         xr = 325,
-        yc = 865,
+        yc = 860,
         font = 'Source Code Pro',
         size = 10,
         color = {color.white, 0.75},
@@ -392,17 +454,18 @@ texts = {
     {
         text = 'Wind',
         x = 25,
-        yc = 880,
+        yc = 875,
         font = 'Square Sans Serif 7',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
-        color = {color.curiousBlue, 1},
+        --color = {color.curiousBlue, 1},
+        color = {weekdayColor[time.weekday], 1},
     },
 
     {
-        text = (weather ~= nil and weather['wind'] ~= nil) and weather['wind']['speed'] .. ' km/h ' .. degreeToCardinal(weather['wind']['deg']) or '',
+        text = (weather ~= nil and weather['wind'] ~= nil) and weather['wind']['speed'] .. ' m/s' .. (weather['wind']['deg'] ~= nil and ' ' .. degreeToCardinal(weather['wind']['deg']) or '') or '',
         xr = 325,
-        yc = 880,
+        yc = 875,
         font = 'Source Code Pro',
         size = 10,
         color = {color.white, 0.75},
@@ -412,43 +475,110 @@ texts = {
     {
         text = 'Humidity',
         x = 25,
-        yc = 895,
+        yc = 890,
         font = 'Square Sans Serif 7',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
-        color = {color.curiousBlue, 1},
+        --color = {color.curiousBlue, 1},
+        color = {weekdayColor[time.weekday], 1},
     },
+
+    {
+        text = '░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░',
+        xc = 175,
+        yc = 890,
+        --font = 'Square Sans Serif 7',
+        font = 'Source Code Pro',
+        face = CAIRO_FONT_WEIGHT_BOLD,
+        size = 10,
+        color = {color.white, 0.5},
+    },
+
 
     {
         text = (weather ~= nil and weather['main'] ~= nil) and weather['main']['humidity'] .. '%' or '',
         xr = 325,
-        yc = 895,
+        yc = 890,
         font = 'Source Code Pro',
         size = 10,
         color = {color.white, 0.75},
     },
 
-    -- dewpoint
+    -- clouds
+    {
+        text = 'Clouds',
+        x = 25,
+        yc = 905,
+        font = 'Square Sans Serif 7',
+        face = CAIRO_FONT_WEIGHT_BOLD,
+        size = 10,
+        --color = {color.curiousBlue, 1},
+        color = {weekdayColor[time.weekday], 1},
+    },
+
+    {
+        text = (weather ~= nil and weather['clouds'] ~= nil) and (weather['clouds']['all'] .. '%') or '',
+        xr = 320,
+        yc = 905,
+        font = 'Source Code Pro',
+        size = 10,
+        color = {color.white, 0.75},
+    },
+
+    -- rain
+    {
+        text = 'Rain',
+        x = 25,
+        yc = 920,
+        font = 'Square Sans Serif 7',
+        face = CAIRO_FONT_WEIGHT_BOLD,
+        size = 10,
+        --color = {color.curiousBlue, 1},
+        color = {weekdayColor[time.weekday], 1},
+    },
+
+    {
+        text = '░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░',
+        xc = 175,
+        yc = 920,
+        --font = 'Square Sans Serif 7',
+        font = 'Source Code Pro',
+        face = CAIRO_FONT_WEIGHT_BOLD,
+        size = 10,
+        color = {color.white, 0.5},
+    },
+
+
+    {
+        text = (weather ~= nil and weather['rain'] ~= nil) and weather['rain']['1h'] .. ' m' or '',
+        xr = 325,
+        yc = 920,
+        font = 'Source Code Pro',
+        size = 10,
+        color = {color.white, 0.75},
+    },
 
     -- pressure
     {
         text = 'Pressure',
         x = 25,
-        yc = 925,
+        yc = 935,
         font = 'Square Sans Serif 7',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
-        color = {color.curiousBlue, 1},
+        --color = {color.curiousBlue, 1},
+        color = {weekdayColor[time.weekday], 1},
     },
 
     {
         text = (weather ~= nil and weather['main'] ~= nil) and weather['main']['pressure'] .. ' hPa' or '',
         xr = 325,
-        yc = 925,
+        yc = 935,
         font = 'Source Code Pro',
         size = 10,
         color = {color.white, 0.75},
     },
+
 
     -- visibility
     {
@@ -458,8 +588,21 @@ texts = {
         font = 'Square Sans Serif 7',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
-        color = {color.curiousBlue, 1},
+        --color = {color.curiousBlue, 1},
+        color = {weekdayColor[time.weekday], 1},
     },
+
+    {
+        text = '░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░',
+        xc = 175,
+        yc = 950,
+        --font = 'Square Sans Serif 7',
+        font = 'Source Code Pro',
+        face = CAIRO_FONT_WEIGHT_BOLD,
+        size = 10,
+        color = {color.white, 0.5},
+    },
+
 
     {
         text = (weather ~= nil and weather['visibility'] ~= nil) and weather['visibility'] .. ' m' or '',
@@ -480,8 +623,21 @@ texts = {
         font = 'Square Sans Serif 7',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
-        color = {color.curiousBlue, 1},
+        --color = {color.curiousBlue, 1},
+        color = {weekdayColor[time.weekday], 1},
     },
+
+    {
+        text = '░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░',
+        xc = 175,
+        yc = 980,
+        --font = 'Square Sans Serif 7',
+        font = 'Source Code Pro',
+        face = CAIRO_FONT_WEIGHT_BOLD,
+        size = 10,
+        color = {color.white, 0.5},
+    },
+
 
     {
         text = ((weather ~= nil and weather['coord'] ~= nil) and (string.format('%0.f', math.abs(weather['coord']['lat'])) .. (tonumber(weather['coord']['lat']) > 0 and 'N' or 'S') .. ' ' .. string.format('%0.f', math.abs(weather['coord']['lon'])) .. (tonumber(weather['coord']['lon']) > 0 and 'E' or 'W')) or ''),

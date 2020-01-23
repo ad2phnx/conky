@@ -15,6 +15,7 @@ dofile '.config/gen2con/lua/funcs.lua'
 dofile '.config/gen2con/lua/staticVars.lua'
 dofile '.apiKeys.lua'
 weather = {}
+forecast = {}
 weatherIcons = {}
 file = ""
 wLastUp = 0
@@ -353,13 +354,14 @@ function do_clock(cr, updates)
       hourText.size = (tonumber(time.twofour) == i) and 20 or 12
       hourText.color = (tonumber(time.twofour) == i) and  {weekdayColor[time.weekday], 0.75} or {color.white, 0.75}
 
-      local wkRad = 100
+      local wkRad = 90
       local wkX, wkXd = round(wkRad * math.cos(((tonumber(time.twofour) + i) % 24) * 15 * deg2rad + deg90rad))
       local wkY, wkYd = round(wkRad * math.sin(((tonumber(time.twofour) + i) % 24) * 15 * deg2rad + deg90rad))
       wkReviews.text = #wanikani.reviews[i+1]
       wkReviews.xc = cCenter.x + wkX - 400
       wkReviews.yc = cCenter.y - cHeight / 4 + wkY
-      wkReviews.font = 'Square Sans Serif 7'
+      --wkReviews.font = 'Square Sans Serif 7'
+      wkReviews.font = 'Japan'
       --wkReviews.color = {color.white, 1}
       if i > 0 then
         draw_text(cr, hourText)
@@ -395,36 +397,113 @@ function do_new_weather(cr, updates)
         -- every 15 minutes get weather info
         if (weather == nil or (updates > wLastUp + 60)) or updates == 6 or updates % 900 == 0 then
 
-            -- hit openweathermap.org and moonphases.co.uk
+            -- get current weather
             --print("Getting weather...", updates, wLastUp)
             local curlCall = 'curl -s -H "Cache-Control: no-cache" "api.openweathermap.org/data/2.5/weather?id=' .. sWeather.id .. '&units=' .. sWeather.units .. '&lang=' .. sWeather.lang ..  '&APPID=' .. OWMAPIKEY .. '"'
-            --print("Using curl: " .. curlCall)
             local curFile = assert(io.popen(curlCall))
             local curRFile = assert(curFile:read('*a'))
             curFile:close()
             weather = json.decode(curRFile)
+            if weather ~= nil and weather['weather'] ~= nil then 
+                run_cmd('wget -nc http://openweathermap.org/img/wn/' .. weather['weather'][1]['icon'] .. '@2x.png -O /home/adinis/.config/gen2con/weather/' .. weather['weather'][1]['icon'] .. '@2x.png')
+                sunAmount(weather['sys']['sunrise'],  weather['sys']['sunset'], sun)
+            end
 
-            run_cmd('wget http://openweathermap.org/img/wn/' .. weather['weather'][1]['icon'] .. '@2x.png -O /home/adinis/.config/gen2con/weather/' .. weather['weather'][1]['icon'] .. '@2x.png')
+            -- get weather forecast
+            curlCall = 'curl -s -H "Cache-Control: no-cache" "api.openweathermap.org/data/2.5/forecast?id=' .. sWeather.id .. '&units=' .. sWeather.units .. '&lang=' .. sWeather.lang ..  '&APPID=' .. OWMAPIKEY .. '"'
+            curFile = assert(io.popen(curlCall))
+            curRFile = assert(curFile:read('*a'))
+            curFile:close()
+            forecast = json.decode(curRFile)
 
-            --local wthIconFile = assert(io.popen('curl http://openweathermap.org/img/wn/' .. weather['weather'][1]['icon'] .. '@2x.png'))
-            --weatherIcons.currentIcon = assert(io.popen('curl http://openweathermap.org/img/wn/' .. weather['weather'][1]['icon'] .. '@2x.png'))
-            --print(weatherIcons.currentIcon:read('*a'))
-            --local wthIconRFile = assert(wthIconFile:read('*a'))
-            --wthIconFile:close()
-            --weatherIcons.currentIcon = wthIconRFile
+            -- download forecast images
+            if (forecast ~= nil and forecast['list'] ~= nil) then
+                for fIdx = 1, 40 do
+                    run_cmd('wget -nc http://openweathermap.org/img/wn/' .. forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x.png -O /home/adinis/.config/gen2con/weather/' .. forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x.png')
+                end
+            end
 
-            -- upate sunlight amount
-            sunAmount(weather['sys']['sunrise'],  weather['sys']['sunset'], sun)
 
             -- save last weather update "time"
             wLastUp = updates
         end
+
 
         -- draw images
         for i in pairs(images) do
             put_image(cr, images[i])
         end
 
+        -- draw forecast
+        for dIdx = 0, 6 do
+            local space = 43
+            local yOff = cCenter.y + 50
+            local xOff = ((cCenter.x - 400 - 130) + (space * ((dIdx + time.weekday - 1) % 7)))
+            local lx0, ly0 = xOff, cCenter.y - cHeight / 4 - 190
+            local lx1, ly1, bly1 = xOff, cCenter.y + cHeight / 4 + 190, cCenter.y - cHeight / 4 + 190
+
+            -- weekday lines
+            baseLine.x, baseLine.y = lx0, ly0
+            baseLine.tox, baseLine.toy = lx1, bly1
+            baseLine.color = {weekdayColor[((dIdx + time.weekday - 1) % 7 + 1)], dIdx == 0 and 0.5 or 0.1}
+            draw_line(cr, baseLine)
+            baseLine.y, baseLine.toy = cCenter.y + cHeight / 4 - 200, cCenter.y + cHeight / 4 + 200
+            draw_line(cr, baseLine)
+
+
+            -- fcast morning images
+            local fIdx = math.ceil(((24 * dIdx) - time.twofour + 9) / 3)
+            yOff = 50
+            fcastImg.x = xOff
+            fcastImg.y = cCenter.y - cHeight / 4 - 190
+            fcastImg.file = '/home/adinis/.config/gen2con/weather/' .. ((fIdx > 0 and fIdx <= 40 and forecast ~= nil and forecast['list'] ~= nil) and (forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x') or 'NA') .. '.png'
+            local lx0, ly0 = fcastImg.x, fcastImg.y
+
+            -- morning forecast
+            fcastText.xc = fcastImg.x
+            fcastText.yc = fcastImg.y + 32
+            fcastText.font = 'Kochi Mincho'
+            --fcastText.font = 'Sazanami Mincho'
+            fcastText.text = (fIdx > 0 and fIdx <= 40 and forecast ~= nil and forecast['list'] ~= nil) and forecast['list'][fIdx]['weather'][1]['description'] or ''
+            if (fIdx > 0 and fIdx <= 40 and dIdx < 6) then
+                put_image(cr, fcastImg)
+                draw_text(cr, fcastText)
+                -- morning temperature
+                fcastText.yc = fcastImg.y + 20
+                --fcastText.font = 'Japan'
+                fcastText.font = 'Square Sans Serif 7'
+                fcastText.text = (fIdx > 0 and fIdx <= 40 and forecast ~= nil and forecast['list'] ~= nil) and round(forecast['list'][fIdx]['main']['temp']) .. '°C' or ''
+                draw_text(cr, fcastText)
+            end
+
+            -- morning precipitation
+
+            -- fcast night images
+            fIdx = math.ceil(((24 * dIdx) - time.twofour + 21) / 3)
+            fcastImg.y = fcastImg.y + 380
+            fcastImg.file = '/home/adinis/.config/gen2con/weather/' .. ((fIdx > 0 and fIdx <= 40 and forecast ~= nil and forecast['list'] ~= nil) and (forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x') or 'NA') .. '.png'
+            local lx1, ly1 = fcastImg.x, cCenter.y + cHeight / 4 + 190
+
+            -- night precipitation
+            -- forecast low
+
+            -- night forecast
+            fcastText.xc = fcastImg.x
+            fcastText.yc = fcastImg.y - 32
+            fcastText.font = 'Kochi Mincho'
+            --fcastText.font = 'Sazanami Mincho'
+            fcastText.text = (fIdx > 0 and fIdx <= 40 and forecast ~= nil and forecast['list'] ~= nil) and forecast['list'][fIdx]['weather'][1]['description'] or ''
+            if (fIdx > 0 and fIdx <= 40 and dIdx < 6) then
+                put_image(cr, fcastImg)
+                draw_text(cr, fcastText)
+                -- night temperature
+                fcastText.yc = fcastImg.y - 20
+                --fcastText.font = 'Japan'
+                fcastText.font = 'Square Sans Serif 7'
+                fcastText.text = (fIdx > 0 and fIdx <= 40 and forecast ~= nil and forecast['list'] ~= nil) and round(forecast['list'][fIdx]['main']['temp']) .. '°C' or ''
+                draw_text(cr, fcastText)
+            end
+        end
 
         -- draw boxes
         for i in pairs(boxes) do
