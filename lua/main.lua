@@ -16,6 +16,7 @@ dofile '.config/gen2con/lua/staticVars.lua'
 dofile '.apiKeys.lua'
 weather = {}
 forecast = {}
+moon = {}
 weatherIcons = {}
 file = ""
 wLastUp = 0
@@ -423,6 +424,14 @@ function do_new_weather(cr, updates)
                 end
             end
 
+            -- update moon info
+            local moonFile = assert(io.popen('curl -s "https://moonphases.co.uk/service/getMoonDetails.php?day=' .. time.day .. '^&month=' .. time.month .. '^&year=' .. time.year .. '^&lat=' .. weather['coord']['lat'] .. '^&lng=' .. weather['coord']['lon'] .. '^&len=6' .. '^&tz=' .. 'jst' .. '" --compressed'))
+            local rMoonFile = assert(moonFile:read('*a'))
+            moonFile:close()
+            local moonJson = json.decode(rMoonFile)
+            moon.degree = -tonumber(moonJson.moonsign_deg)
+            moon.icon = moonJson.days[1].phase_img
+            moon.phase = moonJson.days[1].phase_name
 
             -- save last weather update "time"
             wLastUp = updates
@@ -445,7 +454,7 @@ function do_new_weather(cr, updates)
             -- weekday lines
             baseLine.x, baseLine.y = lx0, ly0
             baseLine.tox, baseLine.toy = lx1, bly1
-            baseLine.color = {weekdayColor[((dIdx + time.weekday - 1) % 7 + 1)], dIdx == 0 and 0.5 or 0.1}
+            baseLine.color = {weekdayColor[((dIdx + time.weekday - 1) % 7 + 1)], dIdx == 0 and 0.25 or 0.1}
             draw_line(cr, baseLine)
             baseLine.y, baseLine.toy = cCenter.y + cHeight / 4 - 200, cCenter.y + cHeight / 4 + 200
             draw_line(cr, baseLine)

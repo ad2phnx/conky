@@ -63,7 +63,7 @@ wkReviews = {
   xc = cCenter.x - 400,
   yc = cCenter.y - cHeight / 4,
   font = 'Square Sans Serif 7',
-  size = 12,
+  size = 14,
   color = {color.roseGold, 1},
 }
 
@@ -97,14 +97,14 @@ texts = {
     yc = cCenter.y - cHeight /4,
     font = 'HakusyuKaisyoExtraBold_kk',
     size = 172,
-    color = {weekdayColor[tonumber(time.weekday)], 0.4},
+    color = {weekdayColor[tonumber(time.weekday)], 0.25},
   },
 
   -- Time
   {
     text = string.format("%0.f", time.hours) .. ':' .. time.minutes .. ' ' .. time.ampm,
     x = 25,
-    yc = 1044,
+    yc = 1040,
     font = 'Square Sans Serif 7',
     size = 40,
     color = {color.white, 0.75},

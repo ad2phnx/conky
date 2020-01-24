@@ -43,6 +43,18 @@ images = {
         --file = weatherIcons.currentIcon:read('*a'),
     },
 
+    -- Moon
+    {
+        x = 325 - 24,
+        y = 1080 - 16 - 24,
+        w = 48,
+        h = 48,
+        file = '/home/adinis/.config/gen2con/moon/' .. ((moon ~= nil and moon.icon ~= nil) and moon.icon or 'NA.png'),
+        rotate = true,
+        theta = (moon ~= nil and moon.degree) or 0,
+    },
+
+
     -- Globe position
     {
         x = cCenter.x - 400,
@@ -224,11 +236,11 @@ boxes = {
       -- Moon bg
       {
         x = 325 - 48,
-        y = 1080 - 12 - 48,
+        y = 1080 - 16 - 48,
         w = 48,
         h = 48,
         corners = {{'circle', 24}},
-        color = {{1, color.lavenderGrey, 0.5}, {0, color.black, 0}},
+        color = {{1, color.lavenderGrey, 0.25}, {0, color.black, 0}},
         border = 0,
         radialGradient = { 24, 24, 12, 24, 24, 24},
       },
@@ -438,7 +450,7 @@ texts = {
         font = 'Source Code Pro',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
-        color = {color.white, 0.5},
+        color = {color.white, 0.25},
     },
 
     {
@@ -491,7 +503,7 @@ texts = {
         font = 'Source Code Pro',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
-        color = {color.white, 0.5},
+        color = {color.white, 0.25},
     },
 
 
@@ -545,12 +557,12 @@ texts = {
         font = 'Source Code Pro',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
-        color = {color.white, 0.5},
+        color = {color.white, 0.25},
     },
 
 
     {
-        text = (weather ~= nil and weather['rain'] ~= nil) and weather['rain']['1h'] .. ' m' or '',
+        text = (weather ~= nil and weather['rain'] ~= nil) and weather['rain']['1h'] .. ' m' or '-',
         xr = 325,
         yc = 920,
         font = 'Source Code Pro',
@@ -558,11 +570,33 @@ texts = {
         color = {color.white, 0.75},
     },
 
+    -- snow 
+    {
+        text = 'Snow',
+        x = 25,
+        yc = 935,
+        font = 'Square Sans Serif 7',
+        face = CAIRO_FONT_WEIGHT_BOLD,
+        size = 10,
+        --color = {color.curiousBlue, 1},
+        color = {weekdayColor[time.weekday], 1},
+    },
+
+    {
+        text = (weather ~= nil and weather['snow'] ~= nil) and weather['snow']['1h'] .. ' m' or '-',
+        xr = 325,
+        yc = 935,
+        font = 'Source Code Pro',
+        size = 10,
+        color = {color.white, 0.75},
+    },
+
+
     -- pressure
     {
         text = 'Pressure',
         x = 25,
-        yc = 935,
+        yc = 950,
         font = 'Square Sans Serif 7',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
@@ -573,7 +607,7 @@ texts = {
     {
         text = (weather ~= nil and weather['main'] ~= nil) and weather['main']['pressure'] .. ' hPa' or '',
         xr = 325,
-        yc = 935,
+        yc = 950,
         font = 'Source Code Pro',
         size = 10,
         color = {color.white, 0.75},
@@ -584,7 +618,7 @@ texts = {
     {
         text = 'Visibility',
         x = 25,
-        yc = 950,
+        yc = 965,
         font = 'Square Sans Serif 7',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
@@ -595,25 +629,23 @@ texts = {
     {
         text = '░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░',
         xc = 175,
-        yc = 950,
+        yc = 965,
         --font = 'Square Sans Serif 7',
         font = 'Source Code Pro',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
-        color = {color.white, 0.5},
+        color = {color.white, 0.25},
     },
 
 
     {
         text = (weather ~= nil and weather['visibility'] ~= nil) and weather['visibility'] .. ' m' or '',
         xr = 325,
-        yc = 950,
+        yc = 965,
         font = 'Source Code Pro',
         size = 10,
         color = {color.white, 0.75},
     },
-
-    -- UV index/status
 
     -- location
     {
@@ -635,7 +667,7 @@ texts = {
         font = 'Source Code Pro',
         face = CAIRO_FONT_WEIGHT_BOLD,
         size = 10,
-        color = {color.white, 0.5},
+        color = {color.white, 0.25},
     },
 
 
@@ -729,4 +761,14 @@ texts = {
         color = {color.sun50, 1},
     },
 
+    -- moon type
+    {
+        text = ((moon ~= nil and moon.phase ~= nil) and moon.phase or ''),
+        xr = 325,
+        yc = 1010,
+        font = 'Source Code Pro',
+        size = 10,
+        --color = {color.white, 0.75},
+        color = {color.moon50, 0.75},
+    },
 }
