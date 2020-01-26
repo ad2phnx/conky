@@ -41,10 +41,11 @@ function parseWKDateToHour(wkDate)
     --print("utc: " .. utc.hour)
     --print("wkt: " .. wkt.hour)
     local offset = wkt.hour - utc.hour
-    --print("off: " .. offset)
+    local nextHr = lct.hour + offset
+    nextHr = (nextHr) > 24 and nextHr - 24 or nextHr
 
     if (offset > 0) then
-        return (lct.hour + offset) .. ":00"
+        return nextHr .. ":00"
     else
         return "now"
     end

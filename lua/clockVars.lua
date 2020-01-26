@@ -60,10 +60,10 @@ hourText = {
 
 wkReviews = {
   text = '',
-  xc = cCenter.x - 400,
-  yc = cCenter.y - cHeight / 4,
+  xc = cCenter.x - 500,
+  yc = cCenter.y,
   font = 'Square Sans Serif 7',
-  size = 14,
+  size = 16,
   color = {color.roseGold, 1},
 }
 

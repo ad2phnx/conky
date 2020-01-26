@@ -43,7 +43,7 @@ baseProc = {
 }
 
 --[[Disk]]--
-diskMain = '/dev/sda3'
+diskMain = '/dev/sda1'
 
 --[[Net]]--
 netIface = conky_parse('${gw_iface}')
@@ -58,7 +58,11 @@ system = {
   memFree = conky_parse('${memfree}'),
   memMax = conky_parse('${memmax}'),
   memPerc = conky_parse('${memperc}'),
-  batPerc = 100, --conky_parse('${battery_percent}'),
+  batPerc = conky_parse('${battery_percent}'),
+  batOn = string.gsub(conky_parse('${battery_short}'), "([A-Z]).*", "%1"),
+  batTime = conky_parse('${battery_time}'),
+  batFull = conky_parse('${battery}'),
+  brightness = get_con("echo \"$(cat /sys/class/backlight/intel_backlight/brightness) / $(cat /sys/class/backlight/intel_backlight/max_brightness) * 100\" | bc -l"),
   desktop = conky_parse('${desktop}'),
   desktopName = conky_parse('${desktop_name}'),
   desktopNumber = conky_parse('${desktop_number}'),
@@ -72,12 +76,12 @@ system = {
   entropyPool = conky_parse('${entropy_poolsize}'),
   freq = conky_parse('${freq 1}'),
   freqg = conky_parse('${freq_g 1}'),
-  fsFree = conky_parse('${fs_free /home/adinis}'),
-  fsFreePerc = conky_parse('${fs_free_perc /home/adinis}'),
-  fsSize = conky_parse('${fs_size /home/adinis}'),
-  fsType = conky_parse('${fs_type /home/adinis}'),
-  fsUsed = conky_parse('${fs_used /home/adinis}'),
-  fsUsedPerc = conky_parse('${fs_used_perc /home/adinis}'),
+  fsFree = conky_parse('${fs_free /home/adtwo}'),
+  fsFreePerc = conky_parse('${fs_free_perc /home/adtwo}'),
+  fsSize = conky_parse('${fs_size /home/adtwo}'),
+  fsType = conky_parse('${fs_type /home/adtwo}'),
+  fsUsed = conky_parse('${fs_used /home/adtwo}'),
+  fsUsedPerc = conky_parse('${fs_used_perc /home/adtwo}'),
   iosched = conky_parse('${ioscheduler sda}'),
   kernel = conky_parse('${kernel}'),
   loadAvg1 = conky_parse('${loadavg 1}'),
@@ -103,6 +107,5 @@ system = {
   userTimes = conky_parse('${user_times}'),
   arch = conky_parse('${conky_build_arch}'),
   ip = conky_parse('${addr ' .. netIface .. '}'),
-  --netUpDown = get_con('~/.bin/testNet.sh'),
-  netUpDown = "up",
+  netUpDown = get_con('~/.bin/testNet.sh'),
 }

@@ -212,16 +212,60 @@ texts = {
   --  color = (sysUpdates ~= nil and tonumber(sysUpdates) > 0) and {color.blazeOrange, 0.75} or {color.white, 0.75},
   --  --color = {color.white, 0.75},
   --},
+  
+  {
+    text = "WaniKani" .. ((wanikani.userLevel > 0) and ' ' .. wanikani.userLevel or ''),
+    xc = cCenter.x - 400,
+    yc = cCenter.y - 30,
+    font = 'Japan',
+    size = 48,
+    color = {color.roseGold, 1},
+  },
+
+  {
+    text = wkRevIcon,
+    xc = cCenter.x - 530,
+    yc = cCenter.y,
+    font = 'Font Awesome 5 Free Solid',
+    size = 24,
+    color = {color.white, 0.75},
+  },
+
+  {
+    text = wkLesIcon,
+    xc = cCenter.x - 270,
+    yc = cCenter.y,
+    font = 'Font Awesome 5 Free Solid',
+    size = 24,
+    color = {color.white, 0.75},
+  },
 
   -- base wanikani reviews
   {
-    text = ((wanikani.userLevel > 0) and wanikani.userLevel or "WK") .. ' r:' .. wanikani.reviewsNow .. ' l:' .. wanikani.lessonsNow .. ' n:' .. parseWKDateToHour(wanikani.nextAvailAt),
-    xr = 325,
-    yc = 40,
+    text = wanikani.reviewsNow > 0 and wanikani.reviewsNow or '✓',
+    xc = cCenter.x - 530,
+    yc = cCenter.y + 30,
     font = 'Source Code Pro',
-    size = 12,
-    color = wanikani.reviewsNow > 0 and {color.roseGold, 1} or wanikani.lessonsNow > 0 and {color.gentooGreen, 1} or {color.white, 0.75},
-    --color = {color.white, 0.75},
+    size = 24,
+    color = wanikani.reviewsNow > 0 and {color.roseGold, 1} or {color.white, 0.75},
+  },
+
+  {
+    text = wanikani.lessonsNow > 0 and wanikani.lessonsNow or '✓',
+    xc = cCenter.x - 270,
+    yc = cCenter.y + 30,
+    font = 'Source Code Pro',
+    size = 24,
+    color = wanikani.lessonsNow > 0 and {color.roseGold, 1} or {color.white, 0.75},
+  },
+
+  {
+    text = parseWKDateToHour(wanikani.nextAvailAt),
+    xc = cCenter.x - 400,
+    yc = cCenter.y + 30,
+    font = 'Source Code Pro',
+    size = 24,
+    color = (wanikani.reviewsNow > 0 or wanikani.lessonsNow > 0) and {color.roseGold, 1} or {color.white, 0.75},
   },
 
   -- user / host / uptime
@@ -431,14 +475,14 @@ texts = {
   },
 
   ---- battery
-  --{
-  --  text = (system.batPerc == '100') and '.' or system.batPerc,
-  --  xc = cCenter.x - 560,
-  --  yc = cCenter.y - 95,
-  --  font = 'Source Code Pro',
-  --  size = 16,
-  --  color = {color.white, 0.75},
-  --},
+  {
+    text = (system.batPerc == '100') and '.' or system.batPerc .. '%',
+    xr = 325,
+    yc = 40,
+    font = 'Source Code Pro',
+    size = 10,
+    color = {color.white, 0.75},
+  },
 
   --{
   --  text = 'bat',
@@ -459,29 +503,29 @@ rings = {
 bars = {
 
   -- battery
-  --{
-  --  name = '',
-  --  arg = system.batPerc,
-  --  max = 100,
-  --  x = 100,
-  --  y = 78,
-  --  blocks = 1,
-  --  space = 4,
-  --  height = 150,
-  --  width = 4,
-  --  angle = 90,
-  --  ledEffect = 'r',
-  --  alarm = 10,
-  --  cap = 'r',
-  --  bgColor = {color.white, 0.5},
-  --  bgLed = {color.black, 0},
-  --  fgColor = {color.curiousBlue, 1},
-  --  midColor = {{1, color.curiousBlue, 1}, {0.75, color.green, 1}, {0.5, color.white, 1}, {0.25, color.yellow, 1}, {0, color.scarlet, 1}},
-  --  --fgLed = {color.white, 1},
-  --  --alarmColor = {color.scarlet, 1},
-  --  --alarmLed = {color.white, 1},
-  --  smooth = true,
-  --},
+  {
+    name = '',
+    arg = system.batPerc,
+    max = 100,
+    x = 100,
+    y = 78,
+    blocks = 1,
+    space = 4,
+    height = 150,
+    width = 4,
+    angle = 90,
+    ledEffect = 'r',
+    alarm = 10,
+    cap = 'r',
+    bgColor = {color.white, 0.2},
+    bgLed = {color.black, 0},
+    fgColor = {color.curiousBlue, 1},
+    midColor = {{1, color.curiousBlue, 1}, {0.75, color.green, 1}, {0.5, color.white, 1}, {0.25, color.yellow, 1}, {0, color.scarlet, 1}},
+    --fgLed = {color.white, 1},
+    --alarmColor = {color.scarlet, 1},
+    --alarmLed = {color.white, 1},
+    smooth = true,
+  },
 
   -- sunlight 
   {

@@ -16,23 +16,24 @@ mpd = {
   title = conky_parse('${if_mpd_playing}${mpd_title 30}${else}No title${endif}'),
   track = conky_parse('${if_mpd_playing}${mpd_track}${else}No track${endif}'),
   --volume = conky_parse('${mpd_vol}'),
-  volume = string.gsub(get_con("amixer sget Master | awk 'NR==5 {print $5}'"), '[^%d]', ''),
-  isVolOn = string.gsub(get_con("amixer sget Master | awk 'NR==5 {print $7}'"), '[^%w]', ''),
+  volume = string.gsub(get_con("amixer sget Master | awk 'NR==6 {print $5}'"), '[^%d]', ''),
+  headphones = string.gsub(get_con("pactl list sinks | grep \"Active Port\" | awk 'NR==1 {print $3}'"), 'analog%-output%-(.*)', '%1'),
+  isVolOn = string.gsub(get_con("amixer sget Master | awk 'NR==6 {print $6}'"), '[^%w]', ''),
   elapsed = conky_parse('${if_mpd_playing}${mpd_elapsed}${else}${endif}'),
   length = conky_parse('${if_mpd_playing}${mpd_length}${else}${endif}'),
   bitrate = conky_parse('${if_mpd_playing}${mpd_bitrate}${else}${endif}'),
   album = conky_parse('${if_mpd_playing}${mpd_album}${else}${endif}'),
   artist = conky_parse('${if_mpd_playing}${mpd_artist}${else}${endif}'),
-  rating = mpdOn == "On" and file and (check_file('/home/adinis/Music/' .. file) and get_con('eyeD3 -l error /home/adinis/Music/"' .. file .. '" | awk \'/Popularity/\' | sed -r \'s/.*rating: ([0-9]+)\\].*/\\1/\'') or 0) or 0, 
+  rating = mpdOn == "On" and file and (check_file('/home/adtwo/Music/' .. file) and get_con('eyeD3 -l error /home/adtwo/Music/"' .. file .. '" | awk \'/Popularity/\' | sed -r \'s/.*rating: ([0-9]+)\\].*/\\1/\'') or 0) or 0, 
   --rating = 0, 
-  favorite = get_con('if grep -q "$(ncmpcpp -q --current-song %D/%f)" /home/adinis/.config/mpd/playlists/Favorites.m3u; then echo True; else echo False; fi')
+  favorite = get_con('if grep -q "$(ncmpcpp -q --current-song %D/%f)" /home/adtwo/.config/mpd/playlists/Favorites.m3u; then echo True; else echo False; fi')
 }
 
 -- play change / cover info
-coverArt = "/home/adinis/.config/gen2con/covers/FRONT_COVER"
+coverArt = "/home/adtwo/.config/gen2con/covers/FRONT_COVER"
 coverColor = coverColor or color.black
 coverCompliment = coverCompliment or color.white
-noCover = "/home/adinis/.config/gen2con/covers/no_cover.png"
+noCover = "/home/adtwo/.config/gen2con/covers/no_cover.png"
 playChange = ((mpd.file ~= "" and currentPlay ~= mpd.file) and true or false)
 currentPlay = (mpd.file or "")
 
@@ -77,15 +78,26 @@ baseRating = {
 texts = {
 
   -- favorite
-  --{
-  --  text = '',
-  --  xr = 320,
-  --  yt = 505,
-  --  font = 'Font Awesome 5 Free',
-  --  size = 32,
-  --  --color = {color.white, 0.1},
-  --  color = (mpd.favorite == 'True') and {coverColor, 0.75} or {coverColor, 0.1},
-  --},
+  {
+    text = '',
+    xr = 320,
+    yt = 505,
+    font = 'Font Awesome 5 Free',
+    size = 32,
+    --color = {color.white, 0.1},
+    color = (mpd.favorite == 'True') and {coverColor, 0.75} or {coverColor, 0.1},
+  },
+
+  -- headphones
+  {
+    text = '',
+    x = 30,
+    yt = 505,
+    font = 'Font Awesome',
+    size = 24,
+    --color = {color.white, 0.75},
+    color = (mpd.headphones == 'headphones') and {color.curiousBlue, 0.75} or {color.white, 0.1},
+  },
 
   -- mpd header
   {

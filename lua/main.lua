@@ -1,5 +1,5 @@
 -- gen2con (Main) Lua Config v0.1
--- adinis (c) 2019
+-- adtwo (c) 2019
 
 require 'cairo'
 require 'imlib2'
@@ -135,7 +135,7 @@ function do_cpu(cr, updates)
           baseTop.text = topProc[baseOrdProc[j]]
           baseTop.size = 10
           baseTop.face = CAIRO_FONT_WEIGHT_NORMAL
-          if baseOrdProc[j] == 'user' and topProc[baseOrdProc[j]] == 'adinis' then
+          if baseOrdProc[j] == 'user' and topProc[baseOrdProc[j]] == 'adtwo' then
             baseTop.color = {color.curiousBlue, 1}
           else
             baseTop.color = {color.white, 0.75}
@@ -244,8 +244,8 @@ function do_music(cr, updates)
       coverColor = color.white
       --sleep(1)
       if mpd.status ~= 'Stopped' then
-        if file and check_file('/home/adinis/Music/' .. file) then
-          os.execute('eyeD3 -l error /home/adinis/Music/"' .. file .. '" --write-images /home/adinis/.config/gen2con/covers/ &> /dev/null')
+        if file and check_file('/home/adtwo/Music/' .. file) then
+          os.execute('eyeD3 -l error /home/adtwo/Music/"' .. file .. '" --write-images /home/adtwo/.config/gen2con/covers/ &> /dev/null')
           if check_file(coverArt .. '.jpeg') then
             os.execute('convert ' .. coverArt .. '.jpeg ' .. coverArt .. '.png')
           end
@@ -358,7 +358,7 @@ function do_clock(cr, updates)
       local wkRad = 90
       local wkX, wkXd = round(wkRad * math.cos(((tonumber(time.twofour) + i) % 24) * 15 * deg2rad + deg90rad))
       local wkY, wkYd = round(wkRad * math.sin(((tonumber(time.twofour) + i) % 24) * 15 * deg2rad + deg90rad))
-      wkReviews.text = #wanikani.reviews[i+1]
+      wkReviews.text = #wanikani.reviews[i+1] > 0 and #wanikani.reviews[i+1] or ''
       wkReviews.xc = cCenter.x + wkX - 400
       wkReviews.yc = cCenter.y - cHeight / 4 + wkY
       --wkReviews.font = 'Square Sans Serif 7'
@@ -406,7 +406,7 @@ function do_new_weather(cr, updates)
             curFile:close()
             weather = json.decode(curRFile)
             if weather ~= nil and weather['weather'] ~= nil then 
-                run_cmd('wget -nc http://openweathermap.org/img/wn/' .. weather['weather'][1]['icon'] .. '@2x.png -O /home/adinis/.config/gen2con/weather/' .. weather['weather'][1]['icon'] .. '@2x.png')
+                run_cmd('wget -nc http://openweathermap.org/img/wn/' .. weather['weather'][1]['icon'] .. '@2x.png -O /home/adtwo/.config/gen2con/weather/' .. weather['weather'][1]['icon'] .. '@2x.png')
                 sunAmount(weather['sys']['sunrise'],  weather['sys']['sunset'], sun)
             end
 
@@ -420,7 +420,7 @@ function do_new_weather(cr, updates)
             -- download forecast images
             if (forecast ~= nil and forecast['list'] ~= nil) then
                 for fIdx = 1, 40 do
-                    run_cmd('wget -nc http://openweathermap.org/img/wn/' .. forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x.png -O /home/adinis/.config/gen2con/weather/' .. forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x.png')
+                    run_cmd('wget -nc http://openweathermap.org/img/wn/' .. forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x.png -O /home/adtwo/.config/gen2con/weather/' .. forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x.png')
                 end
             end
 
@@ -465,7 +465,7 @@ function do_new_weather(cr, updates)
             yOff = 50
             fcastImg.x = xOff
             fcastImg.y = cCenter.y - cHeight / 4 - 190
-            fcastImg.file = '/home/adinis/.config/gen2con/weather/' .. ((fIdx > 0 and fIdx <= 40 and forecast ~= nil and forecast['list'] ~= nil) and (forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x') or 'NA') .. '.png'
+            fcastImg.file = '/home/adtwo/.config/gen2con/weather/' .. ((fIdx > 0 and fIdx <= 40 and forecast ~= nil and forecast['list'] ~= nil) and (forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x') or 'NA') .. '.png'
             local lx0, ly0 = fcastImg.x, fcastImg.y
 
             -- morning forecast
@@ -490,7 +490,7 @@ function do_new_weather(cr, updates)
             -- fcast night images
             fIdx = math.ceil(((24 * dIdx) - time.twofour + 21) / 3)
             fcastImg.y = fcastImg.y + 380
-            fcastImg.file = '/home/adinis/.config/gen2con/weather/' .. ((fIdx > 0 and fIdx <= 40 and forecast ~= nil and forecast['list'] ~= nil) and (forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x') or 'NA') .. '.png'
+            fcastImg.file = '/home/adtwo/.config/gen2con/weather/' .. ((fIdx > 0 and fIdx <= 40 and forecast ~= nil and forecast['list'] ~= nil) and (forecast['list'][fIdx]['weather'][1]['icon'] .. '@2x') or 'NA') .. '.png'
             local lx1, ly1 = fcastImg.x, cCenter.y + cHeight / 4 + 190
 
             -- night precipitation
@@ -591,7 +591,7 @@ function do_weather(cr, updates)
       yOff = 50
       fcastImg.x = xOff 
       fcastImg.y = cCenter.y - cHeight / 4 - 190
-      fcastImg.file = '/home/adinis/.config/gen2con/weather/' .. ((weather ~= nil and weather.dayf ~= nil) and weather.dayf.day[dIdx+1].part[1].icon or 'NA') .. '.png'
+      fcastImg.file = '/home/adtwo/.config/gen2con/weather/' .. ((weather ~= nil and weather.dayf ~= nil) and weather.dayf.day[dIdx+1].part[1].icon or 'NA') .. '.png'
       put_image(cr, fcastImg)
       local lx0, ly0 = fcastImg.x, fcastImg.y
 
@@ -616,7 +616,7 @@ function do_weather(cr, updates)
 
       -- fcast night images
       fcastImg.y = fcastImg.y + 380
-      fcastImg.file = '/home/adinis/.config/gen2con/weather/' .. ((weather ~= nil and weather.dayf ~= nil) and weather.dayf.day[dIdx+1].part[2].icon or 'NA') .. '.png'
+      fcastImg.file = '/home/adtwo/.config/gen2con/weather/' .. ((weather ~= nil and weather.dayf ~= nil) and weather.dayf.day[dIdx+1].part[2].icon or 'NA') .. '.png'
       put_image(cr, fcastImg)
       local lx1, ly1 = fcastImg.x, cCenter.y + cHeight / 4 + 190
 

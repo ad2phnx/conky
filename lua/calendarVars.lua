@@ -1,6 +1,6 @@
-imgTmp = "/home/adinis/.tmp/imgTmp.png"
-imgCal = "/home/adinis/.tmp/calArc.png"
-imgDates = "/home/adinis/.tmp/calDates.png"
+imgTmp = "/home/adtwo/.tmp/imgTmp.png"
+imgCal = "/home/adtwo/.tmp/calArc.png"
+imgDates = "/home/adtwo/.tmp/calDates.png"
 
 calWheel = {
   xc = 600,
@@ -27,7 +27,7 @@ calWheel = {
   dateFormat = "%a %d %b",
   txtX = 200,
   txtY = 300,
-  calendarFile = "/home/adinis/.config/gen2con/lua/calendar.txt",
+  calendarFile = "/home/adtwo/.config/gen2con/lua/calendar.txt",
 }
 
 --minCal = {
@@ -95,7 +95,7 @@ calWheel = {
 --  -- info
 --  displayInfoBox = true,
 --  displayEmptyInfoBox = true,
---  calendarFile = "/home/adinis/.config/gen2con/lua/calendar.txt",
+--  calendarFile = "/home/adtwo/.config/gen2con/lua/calendar.txt",
 --}
 
 
@@ -165,5 +165,5 @@ calendar = {
   -- info
   displayInfoBox = true,
   displayEmptyInfoBox = true,
-  calendarFile = "/home/adinis/.config/gen2con/lua/calendar.txt",
+  calendarFile = "/home/adtwo/.config/gen2con/lua/calendar.txt",
 }

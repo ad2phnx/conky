@@ -134,14 +134,29 @@ weatherKanji = {
 nameKatakana = 'アナトリー'
 yearKanji = '令和'
 
+--[[WaniKani]]--
+wkRevIcon = ''
+wkLesIcon = ''
+
+--[[Battery]]--
+batPlug = ''
+batDesk = ''
+bat = {
+  empty = '',
+  quarter = '',
+  half = '',
+  threeQuarters = '',
+  full = '',
+}
+
 --[[Weather]]--
 sWeather = {
-  --id = '1850144',   -- Tokyo-to
+  id = '1850144',   -- Tokyo-to
   --id = '1850147', -- Tokyo
-  id = '1864529',   -- Chiyoda-ku
+  --id = '1864529',   -- Chiyoda-ku
   units = 'metric',
   lang = 'ja',
 }
 
 --[[Calendar]]--
-calendarFile = "/home/adinis/.config/gen2con/lua/calendar.txt"
+calendarFile = "/home/adtwo/.config/gen2con/lua/calendar.txt"

@@ -14,7 +14,7 @@ fcastImg = {
   y = cCenter.y - 550,
   w = 32,
   h = 32,
-  file = '/home/adinis/.config/gen2con/weather/NA.png',
+  file = '/home/adtwo/.config/gen2con/weather/NA.png',
 }
 
 -- base forecast kanji
@@ -73,7 +73,7 @@ images = {
     y = 910,
     w = 128,
     h = 128,
-    file = '/home/adinis/.config/gen2con/weather/' .. ((weather ~= nil and weather.cc ~= nil) and weather.cc.icon or 'NA') .. '.png',
+    file = '/home/adtwo/.config/gen2con/weather/' .. ((weather ~= nil and weather.cc ~= nil) and weather.cc.icon or 'NA') .. '.png',
   },
 
   -- Moon
@@ -82,7 +82,7 @@ images = {
     y = 1080 - 12 - 24,
     w = 48,
     h = 48,
-    file = '/home/adinis/.config/gen2con/moon/' .. ((weather ~= nil and weather.cc ~= nil) and weather.cc.moon.icon or 'NA') .. '.png',
+    file = '/home/adtwo/.config/gen2con/moon/' .. ((weather ~= nil and weather.cc ~= nil) and weather.cc.moon.icon or 'NA') .. '.png',
     rotate = true,
     theta = (weather ~= nil and weather.moonDeg) or 0,
   },
@@ -93,7 +93,7 @@ images = {
     y = cCenter.y - cHeight / 4,
     w = 96,
     h = 96,
-    file = '/home/adinis/.tmp/earth/earth-out.png',
+    file = '/home/adtwo/.tmp/earth/earth-out.png',
   },
 
 }

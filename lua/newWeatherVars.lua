@@ -27,7 +27,7 @@ fcastImg = {
   y = cCenter.y - 550,
   w = 48,
   h = 48,
-  file = '/home/adinis/.config/gen2con/weather/NA.png',
+  file = '/home/adtwo/.config/gen2con/weather/NA.png',
 }
 
 -- images
@@ -39,7 +39,7 @@ images = {
         y = 910,
         w = 128,
         h = 128,
-        file = '/home/adinis/.config/gen2con/weather/' .. ((weather ~= nil and weather['weather'] ~= nil) and weather['weather'][1]['icon'] .. '@2x' or 'NA') .. '.png',
+        file = '/home/adtwo/.config/gen2con/weather/' .. ((weather ~= nil and weather['weather'] ~= nil) and weather['weather'][1]['icon'] .. '@2x' or 'NA') .. '.png',
         --file = weatherIcons.currentIcon:read('*a'),
     },
 
@@ -49,7 +49,7 @@ images = {
         y = 1080 - 16 - 24,
         w = 48,
         h = 48,
-        file = '/home/adinis/.config/gen2con/moon/' .. ((moon ~= nil and moon.icon ~= nil) and moon.icon or 'NA.png'),
+        file = '/home/adtwo/.config/gen2con/moon/' .. ((moon ~= nil and moon.icon ~= nil) and moon.icon or 'NA.png'),
         rotate = true,
         theta = (moon ~= nil and moon.degree) or 0,
     },
@@ -61,7 +61,7 @@ images = {
         y = cCenter.y - cHeight / 4,
         w = 96,
         h = 96,
-        file = '/home/adinis/.tmp/earth/earth-out.png',
+        file = '/home/adtwo/.tmp/earth/earth-out.png',
     },
 }
 
@@ -562,7 +562,7 @@ texts = {
 
 
     {
-        text = (weather ~= nil and weather['rain'] ~= nil) and weather['rain']['1h'] .. ' m' or '-',
+        text = (weather ~= nil and weather['rain'] ~= nil and weather['rain']['1h'] ~= nil) and weather['rain']['1h'] .. ' m' or '-',
         xr = 325,
         yc = 920,
         font = 'Source Code Pro',
@@ -583,7 +583,7 @@ texts = {
     },
 
     {
-        text = (weather ~= nil and weather['snow'] ~= nil) and weather['snow']['1h'] .. ' m' or '-',
+        text = (weather ~= nil and weather['snow'] ~= nil and weather['snow']['1h'] ~= nil) and weather['snow']['1h'] .. ' m' or '-',
         xr = 325,
         yc = 935,
         font = 'Source Code Pro',
