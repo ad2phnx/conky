@@ -27,7 +27,7 @@ fcastImg = {
   y = cCenter.y - 550,
   w = 48,
   h = 48,
-  file = '/home/adtwo/.config/gen2con/weather/NA.png',
+  file = os.getenv("HOME") .. '/.config/gen2con/weather/NA.png',
 }
 
 -- images
@@ -39,7 +39,7 @@ images = {
         y = 910,
         w = 128,
         h = 128,
-        file = '/home/adtwo/.config/gen2con/weather/' .. ((weather ~= nil and weather['weather'] ~= nil) and weather['weather'][1]['icon'] .. '@2x' or 'NA') .. '.png',
+        file = os.getenv("HOME") .. '/.config/gen2con/weather/' .. ((weather ~= nil and weather['weather'] ~= nil) and weather['weather'][1]['icon'] .. '@2x' or 'NA') .. '.png',
         --file = weatherIcons.currentIcon:read('*a'),
     },
 
@@ -49,7 +49,7 @@ images = {
         y = 1080 - 16 - 24,
         w = 48,
         h = 48,
-        file = '/home/adtwo/.config/gen2con/moon/' .. ((moon ~= nil and moon.icon ~= nil) and moon.icon or 'NA.png'),
+        file = os.getenv("HOME") .. '/.config/gen2con/moon/' .. ((moon ~= nil and moon.icon ~= nil) and moon.icon or 'NA.png'),
         rotate = true,
         theta = (moon ~= nil and moon.degree) or 0,
     },
@@ -61,7 +61,7 @@ images = {
         y = cCenter.y - cHeight / 4,
         w = 96,
         h = 96,
-        file = '/home/adtwo/.tmp/earth/earth-out.png',
+        file = os.getenv("HOME") .. '/.tmp/earth/earth-out.png',
     },
 }
 
@@ -334,7 +334,8 @@ rings = {
     {
         name = '',
         --arg = sun.timePct,
-        arg = tonumber(string.format("%.f", ((time.twofour * 60 + time.minutes)/1440) * 100)),
+        --arg = tonumber(string.format("%.f", ((time.twofour * 60 + time.minutes)/1440) * 100)),
+        arg = tonumber(string.format("%d", ((time.twofour * 60 + time.minutes)/1440) * 100)),
         max = 100,
         xc = cCenter.x - 400,
         yc = cCenter.y - cHeight / 4,
@@ -351,14 +352,16 @@ rings = {
         allSectors = false,
         background = false,
         foreground = true,
-        fgColor1 = {{0, color.black, 0}, {0.25, weekdayColor[time.weekday], 1}, {0.5, color.black, 0}, {0.75, weekdayColor[time.weekday], 1}, {1, color.black, 0}},
+        --fgColor1 = {{0, color.black, 0}, {0.25, weekdayColor[time.weekday], 1}, {0.5, color.black, 0}, {0.75, weekdayColor[time.weekday], 1}, {1, color.black, 0}},
+        fgColor1 = {{0, color.black, 0}, {0.25, color.yellow, 1}, {0.5, color.black, 0}, {0.75, color.yellow, 1}, {1, color.black, 0}},
     },
 
     -- Midday
     {
         name = '',
         --arg = sun.timePct,
-        arg = tonumber(string.format("%.f", ((seconds_to_min(sun.midDay)) / 1440 * 100))),
+        --arg = tonumber(string.format("%.f", ((seconds_to_min(sun.midDay)) / 1440 * 100))),
+        arg = tonumber(string.format("%d", ((seconds_to_min(sun.midDay)) / 1440 * 100))),
         max = 100,
         xc = cCenter.x - 400,
         yc = cCenter.y - cHeight / 4,
@@ -378,7 +381,7 @@ rings = {
         background = false,
         foreground = true,
         --fgColor1 = {{0, color.black, 0}, {0.15, weekdayCompliment[time.weekday], 1}, {0.5, color.black, 0}, {0.85, weekdayCompliment[time.weekday], 1}, {1, color.black, 0}},
-        fgColor1 = {{0, color.black, 0}, {0.15, color.sun50, 1}, {0.5, color.black, 0}, {0.85, color.sun50, 1}, {1, color.black, 0}},
+        fgColor1 = {{0, color.black, 0}, {0.15, color.sun30, 1}, {0.5, color.black, 0}, {0.85, color.sun30, 1}, {1, color.black, 0}},
     },
 
 }
@@ -395,7 +398,7 @@ texts = {
 
     -- current conditions
     {
-        text = (weather ~= nil and weather['main'] ~= nil and weather['weather'] ~= nil) and weather['main']['temp'] .. '°C ' .. weather['weather'][1]['main'] or 'loading...',
+        text = (weather ~= nil and weather['main'] ~= nil and weather['weather'] ~= nil) and weather['main']['temp'] .. '°C ' .. weather['weather'][1]['main'] .. (weather['weather'][2] ~= nil and ' [' .. weather['weather'][2]['main'] .. ']' or '') or 'loading...',
         xc = 175,
         yc = 830,
         font = 'Source Code Pro',
@@ -405,14 +408,14 @@ texts = {
     },
 
     {
-        text = (weather ~= nil and weather['weather']) and weather['weather'][1]['description'],
+        text = (weather ~= nil and weather['weather']) and weather['weather'][1]['description'] .. (weather['weather'][2] ~= nil and '・' .. weather['weather'][2]['description'] or ''),
         xc = 175,
         yc = 850,
         --font = 'HakusyuKaisyoExtraBold_kk',
         font = 'Kochi Mincho',
         --font = 'Sazanami Mincho',
         face = CAIRO_FONT_WEIGHT_BOLD,
-        size = 18,
+        size = 24,
         color = {color.white, 0.75},
     },
 
@@ -605,6 +608,17 @@ texts = {
     },
 
     {
+        text = '░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░',
+        xc = 175,
+        yc = 950,
+        --font = 'Square Sans Serif 7',
+        font = 'Source Code Pro',
+        face = CAIRO_FONT_WEIGHT_BOLD,
+        size = 10,
+        color = {color.white, 0.25},
+    },
+
+    {
         text = (weather ~= nil and weather['main'] ~= nil) and weather['main']['pressure'] .. ' hPa' or '',
         xr = 325,
         yc = 950,
@@ -625,18 +639,6 @@ texts = {
         --color = {color.curiousBlue, 1},
         color = {weekdayColor[time.weekday], 1},
     },
-
-    {
-        text = '░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░',
-        xc = 175,
-        yc = 965,
-        --font = 'Square Sans Serif 7',
-        font = 'Source Code Pro',
-        face = CAIRO_FONT_WEIGHT_BOLD,
-        size = 10,
-        color = {color.white, 0.25},
-    },
-
 
     {
         text = (weather ~= nil and weather['visibility'] ~= nil) and weather['visibility'] .. ' m' or '',

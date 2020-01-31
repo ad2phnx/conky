@@ -63,7 +63,7 @@ wkReviews = {
   xc = cCenter.x - 500,
   yc = cCenter.y,
   font = 'Square Sans Serif 7',
-  size = 16,
+  size = 12,
   color = {color.roseGold, 1},
 }
 

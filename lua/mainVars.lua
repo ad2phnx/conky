@@ -189,7 +189,7 @@ texts = {
     yc = cCenter.y - cHeight / 4,
     font = 'font-logos',
     size = 256,
-    color = {color.gentooPurple, 0.25},
+    color = {color.gentooPurple, 0.5},
   },
 
   -- kernel / updates
@@ -212,14 +212,24 @@ texts = {
   --  color = (sysUpdates ~= nil and tonumber(sysUpdates) > 0) and {color.blazeOrange, 0.75} or {color.white, 0.75},
   --  --color = {color.white, 0.75},
   --},
-  
+
   {
-    text = "WaniKani" .. ((wanikani.userLevel > 0) and ' ' .. wanikani.userLevel or ''),
+    text = ((wanikani.userLevel > 0) and ' ' .. wanikani.userLevel or ''),
     xc = cCenter.x - 400,
     yc = cCenter.y - 30,
     font = 'Japan',
     size = 48,
     color = {color.roseGold, 1},
+  },
+
+
+  {
+    text = "wanikani",
+    xc = cCenter.x - 400,
+    yc = cCenter.y,
+    font = 'Japan',
+    size = 16,
+    color = {color.white, 0.75},
   },
 
   {
@@ -228,7 +238,7 @@ texts = {
     yc = cCenter.y,
     font = 'Font Awesome 5 Free Solid',
     size = 24,
-    color = {color.white, 0.75},
+    color = wanikani.reviewsNow > 0 and {weekdayColor[time.weekday], 1} or {color.white, 0.75},
   },
 
   {
@@ -237,7 +247,7 @@ texts = {
     yc = cCenter.y,
     font = 'Font Awesome 5 Free Solid',
     size = 24,
-    color = {color.white, 0.75},
+    color = wanikani.lessonsNow > 0 and {weekdayCompliment[time.weekday], 1} or {color.white, 0.75},
   },
 
   -- base wanikani reviews
@@ -247,7 +257,7 @@ texts = {
     yc = cCenter.y + 30,
     font = 'Source Code Pro',
     size = 24,
-    color = wanikani.reviewsNow > 0 and {color.roseGold, 1} or {color.white, 0.75},
+    color = wanikani.reviewsNow > 0 and {color.roseGold, 1} or {color.greenSmoke, 0.75},
   },
 
   {
@@ -256,16 +266,16 @@ texts = {
     yc = cCenter.y + 30,
     font = 'Source Code Pro',
     size = 24,
-    color = wanikani.lessonsNow > 0 and {color.roseGold, 1} or {color.white, 0.75},
+    color = wanikani.lessonsNow > 0 and {color.gentooPurpleLight2, 1} or {color.greenSmoke, 0.75},
   },
 
   {
-    text = parseWKDateToHour(wanikani.nextAvailAt),
+    text = parseWKDateToHour(wanikani.nextAvailAt) == "now" and '今',
     xc = cCenter.x - 400,
     yc = cCenter.y + 30,
-    font = 'Source Code Pro',
+    font = 'HakusyuKaisyoExtraBold_kk',
     size = 24,
-    color = (wanikani.reviewsNow > 0 or wanikani.lessonsNow > 0) and {color.roseGold, 1} or {color.white, 0.75},
+    color = (wanikani.reviewsNow > 0 or wanikani.lessonsNow > 0) and {color.green, 1} or {color.white, 0.75},
   },
 
   -- user / host / uptime
@@ -474,14 +484,37 @@ texts = {
     color = {color.white, 0.75},
   },
 
+  -- power icon
+  {
+      text = power,
+      xc = 85,
+      yc = 80,
+      font = 'Font Awesome 5 Free Solid',
+      size = 12,
+      color = {(tonumber(system.batPerc) >= 99 and color.curiousBlue) or (tonumber(system.batPerc) >= 75) and color.green or (tonumber(system.batPerc) >= 50 and color.white) or (tonumber(system.batPerc) >= 25) and color.yellow or color.scalet, 0.75},
+  },
+
+  -- charging or running on battery
+  {
+      text = (system.batOn == 'C' or system.batOn == 'F') and batPlug or batDesk,
+      xc = 265,
+      yc = 80,
+      font = 'Font Awesome 5 Free Solid',
+      size = 12,
+      --color = {color.white, 0.75},
+      --midColor = {{1, color.curiousBlue, 1}, {0.75, color.green, 1}, {0.5, color.white, 1}, {0.25, color.yellow, 1}, {0, color.scarlet, 1}},
+      color = {(tonumber(system.batPerc) >= 99 and color.curiousBlue) or (tonumber(system.batPerc) >= 75) and color.green or (tonumber(system.batPerc) >= 50 and color.white) or (tonumber(system.batPerc) >= 25) and color.yellow or color.scalet, 0.75},
+  },
+
   ---- battery
   {
     text = (system.batPerc == '100') and '.' or system.batPerc .. '%',
     xr = 325,
     yc = 40,
     font = 'Source Code Pro',
+    face = CAIRO_FONT_WEIGHT_BOLD,
     size = 10,
-    color = {color.white, 0.75},
+    color = {(tonumber(system.batPerc) >= 99 and color.curiousBlue) or (tonumber(system.batPerc) >= 75) and color.green or (tonumber(system.batPerc) >= 50 and color.white) or (tonumber(system.batPerc) >= 25) and color.yellow or color.scalet, 0.75},
   },
 
   --{

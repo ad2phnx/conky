@@ -139,6 +139,7 @@ wkRevIcon = ''
 wkLesIcon = ''
 
 --[[Battery]]--
+power = ''
 batPlug = ''
 batDesk = ''
 bat = {
@@ -151,12 +152,12 @@ bat = {
 
 --[[Weather]]--
 sWeather = {
-  id = '1850144',   -- Tokyo-to
+  --id = '1850144',   -- Tokyo-to
   --id = '1850147', -- Tokyo
-  --id = '1864529',   -- Chiyoda-ku
+  id = '1864529',   -- Chiyoda-ku
   units = 'metric',
   lang = 'ja',
 }
 
 --[[Calendar]]--
-calendarFile = "/home/adtwo/.config/gen2con/lua/calendar.txt"
+calendarFile = "${HOME}/.config/gen2con/lua/calendar.txt"

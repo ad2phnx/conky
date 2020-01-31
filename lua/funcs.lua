@@ -520,7 +520,7 @@ end
 
 -- convert rgba (hex color + 0-1 alpha) to 4 distinct vals (1-255,1-255,1-255,0-1)
 function rgb_a_to_r_g_b_a(color, alpha)
-  -- if color == nil then color = 0xFFFFFF end
+  if color == nil then color = 0xFFFFFF end
   local r = (color / 0x10000) % 0x100 / 0xFF
   local g = (color / 0x100) % 0x100 / 0xFF
   local b = (color / 0x1) % 0x100 / 0xFF
