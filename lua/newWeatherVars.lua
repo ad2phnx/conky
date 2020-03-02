@@ -436,7 +436,7 @@ texts = {
     
     -- feels like
     {
-        text = 'Feels Like',
+        text = 'Feels',
         x = 25,
         yc = 860,
         font = 'Square Sans Serif 7',
@@ -457,7 +457,7 @@ texts = {
     },
 
     {
-        text = (weather ~= nil and weather['main'] ~= nil) and weather['main']['feels_like'] .. '°C' or '',
+        text = (weather ~= nil and weather['main'] ~= nil and weather['main']['feels_like'] ~= nil) and weather['main']['feels_like'] .. '°C' or '',
         xr = 325,
         yc = 860,
         font = 'Source Code Pro',

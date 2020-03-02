@@ -7,6 +7,19 @@ background = {
   color = {color.black, 0.85},
 }
 
+-- base wk reviews with low percentage
+baseWKSubject = {
+    text = '',
+    x = cCenter.x - 550,
+    yc = cCenter.y + 25,
+    font = 'Kochi Mincho',
+    face = CAIRO_FONT_WEIGHT_BOLD,
+    size = 24,
+    color = {color.blazeOrange, 0.75},
+    rotate = false,
+    theta = 0,
+}
+
 -- base top line
 baseTop = {
   text = '',
@@ -215,66 +228,100 @@ texts = {
 
   {
     text = ((wanikani.userLevel > 0) and ' ' .. wanikani.userLevel or ''),
-    xc = cCenter.x - 400,
-    yc = cCenter.y - 30,
+    xc = cCenter.x - 490,
+    yc = cCenter.y - 45,
     font = 'Japan',
-    size = 48,
-    color = {color.roseGold, 1},
+    size = 20,
+    color = {color.gold, 1},
   },
 
 
   {
     text = "wanikani",
     xc = cCenter.x - 400,
-    yc = cCenter.y,
+    yc = cCenter.y - 45,
     font = 'Japan',
-    size = 16,
+    size = 20,
     color = {color.white, 0.75},
   },
 
   {
-    text = wkRevIcon,
+    text = wkLevelIcon,
     xc = cCenter.x - 530,
-    yc = cCenter.y,
-    font = 'Font Awesome 5 Free Solid',
-    size = 24,
-    color = wanikani.reviewsNow > 0 and {weekdayColor[time.weekday], 1} or {color.white, 0.75},
+    yc = cCenter.y - 45,
+    --font = 'Font Awesome 5 Free Solid',
+    font = 'SauceCode Pro Nerd Font Mono',
+    size = 36,
+    --color = wanikani.reviewsNow > 0 and {weekdayColor[time.weekday], 1} or {color.white, 0.75},
+    color = wanikani.reviewsNow > 0 and {color.gold, 1} or {color.white, 0.25},
   },
 
   {
+    --text = wkRevIcon .. (wanikani.reviewsNow > 0 and ' ' .. wanikani.reviewsNow or ''),
+    text = wkRevIcon,
+    xc = cCenter.x - 270,
+    yc = cCenter.y - 45,
+    font = 'Font Awesome 5 Free Solid',
+    size = 20,
+    --color = wanikani.reviewsNow > 0 and {weekdayColor[time.weekday], 1} or {color.white, 0.75},
+    color = wanikani.reviewsNow > 0 and {color.roseGold, 1} or {color.white, 0.25},
+  },
+
+  {
+    --text = wkLesIcon .. (wanikani.lessonsNow > 0 and ' ' .. wanikani.lessonsNow or ''),
     text = wkLesIcon,
     xc = cCenter.x - 270,
-    yc = cCenter.y,
+    yc = cCenter.y - 15,
     font = 'Font Awesome 5 Free Solid',
-    size = 24,
-    color = wanikani.lessonsNow > 0 and {weekdayCompliment[time.weekday], 1} or {color.white, 0.75},
+    size = 20,
+    --color = wanikani.lessonsNow > 0 and {weekdayCompliment[time.weekday], 1} or {color.white, 0.75},
+    color = wanikani.lessonsNow > 0 and {color.curiousBlue, 1} or {color.white, 0.25},
+  },
+
+  {
+    --text = wkCritIcon .. (#wanikani.infoSubjectLessThan > 0 and ' ' .. #wanikani.infoSubjectLessThan or ''),
+    text = wkCritIcon,
+    xc = cCenter.x - 530,
+    yc = cCenter.y - 15,
+    font = 'Font Awesome 5 Free Solid',
+    size = 20,
+    color = #wanikani.infoSubjectLessThan > 0 and {color.blazeOrange, 0.75} or {color.white, 0.25},
   },
 
   -- base wanikani reviews
   {
-    text = wanikani.reviewsNow > 0 and wanikani.reviewsNow or '✓',
-    xc = cCenter.x - 530,
-    yc = cCenter.y + 30,
-    font = 'Source Code Pro',
-    size = 24,
+    text = wanikani.reviewsNow > 0 and wanikani.reviewsNow or '',
+    xc = cCenter.x - 310,
+    yc = cCenter.y - 45,
+    font = 'Japan',
+    size = 20,
     color = wanikani.reviewsNow > 0 and {color.roseGold, 1} or {color.greenSmoke, 0.75},
   },
 
   {
-    text = wanikani.lessonsNow > 0 and wanikani.lessonsNow or '✓',
-    xc = cCenter.x - 270,
-    yc = cCenter.y + 30,
-    font = 'Source Code Pro',
-    size = 24,
-    color = wanikani.lessonsNow > 0 and {color.gentooPurpleLight2, 1} or {color.greenSmoke, 0.75},
+    text = wanikani.lessonsNow > 0 and wanikani.lessonsNow or '',
+    xc = cCenter.x - 310,
+    yc = cCenter.y - 15,
+    font = 'Japan',
+    size = 20,
+    color = wanikani.lessonsNow > 0 and {color.curiousBlue, 1} or {color.greenSmoke, 0.75},
+  },
+
+  {
+    text = #wanikani.infoSubjectLessThan > 0 and ' ' .. #wanikani.infoSubjectLessThan or '',
+    xc = cCenter.x - 490,
+    yc = cCenter.y - 15,
+    font = 'Japan',
+    size = 20,
+    color = #wanikani.infoSubjectLessThan > 0 and {color.blazeOrange, 0.75} or {color.greenSmoke, 0.25},
   },
 
   {
     text = parseWKDateToHour(wanikani.nextAvailAt) == "now" and '今',
     xc = cCenter.x - 400,
-    yc = cCenter.y + 30,
+    yc = cCenter.y - 15,
     font = 'HakusyuKaisyoExtraBold_kk',
-    size = 24,
+    size = 20,
     color = (wanikani.reviewsNow > 0 or wanikani.lessonsNow > 0) and {color.green, 1} or {color.white, 0.75},
   },
 

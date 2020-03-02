@@ -26,8 +26,10 @@ sysUpdates = 0
 wanikani = {
   linkBase = "https://api.wanikani.com/v2/",
   linkSummary = "summary",
+  linkReviewStats = "review_statistics?percentages_less_than=70",
   linkUser = "user",
   linkReviewsAvail = "assignments?immediately_available_for_review",
+  linkSubjects = "subjects",
   headers = {
     "Authorization: Bearer " .. WKAPIToken,
     "Wanikani-Revision: 20170710",
@@ -35,10 +37,14 @@ wanikani = {
   },
   lastModified = "",
   userLastModified = "",
+  revStatLastModified = "",
   reviewsNow = 0,
   reviews24H = 0,
   reviews = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
   lessons = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
+  idsSubjectLessThan = {},
+  infoSubjectLessThan = {},
+  randomSubject = {},
   lessonsNow = 0,
   nextAvailAt = "",
   userLevel = 0,
@@ -93,8 +99,14 @@ function do_cpu(cr, updates)
         --print("WKLevel: " .. wanikani.userLevel)
       else
       end
-    end
 
+      if getWKReviewStats(cURL, json, wanikani) then
+          --print("Got reviews stats... " .. table.concat(wanikani.idsSubjectLessThan,","))
+          wanikani.linkSubjects = "subjects?ids=" .. table.concat(wanikani.idsSubjectLessThan,",")
+          getWKSubjectsLessThan(cURL, json, wanikani)
+      else
+      end
+    end
     -- background
     draw_background(cr, background)
 
@@ -117,6 +129,47 @@ function do_cpu(cr, updates)
     for i in pairs(texts) do
       draw_text(cr, texts[i])
     end
+
+    --local startYc = baseWKSubject.yc
+    --local currLvl = 1
+    --local currItem = 1
+    --local i = 1
+    if wanikani.infoSubjectLessThan[1] ~= nil and (updates == 6 or updates % 60 == 0) then
+        randomSubject = wanikani.infoSubjectLessThan[math.random(#wanikani.infoSubjectLessThan)]
+    end
+    baseWKSubject.text = randomSubject['characters'] ~= nil and randomSubject['characters'] or ''
+    draw_text(cr, baseWKSubject)
+    baseWKSubject.text = randomSubject['meaning'] ~= nil and randomSubject['meaning'] .. ' (' .. randomSubject['level'] .. ')' or ''
+    baseWKSubject.x = nil
+    baseWKSubject.xr = cCenter.x - 250
+    baseWKSubject.size = 14
+    baseWKSubject.font = 'Source Code Pro'
+    draw_text(cr, baseWKSubject)
+    --    while currItem <= 25 do
+    --        local v = wanikani.infoSubjectLessThan[currItem]
+    --        if currLvl ~= v['level'] then
+    --            baseWKSubject.text = '[' .. v['level'] .. ']'
+    --            baseWKSubject.color = {color.white, 1.0}
+    --            baseWKSubject.size = 10
+    --            currLvl = v['level']
+    --        else
+    --            if v['type'] == 'kanji' then
+    --                baseWKSubject.color = {color.roseGold, 1.0}
+    --            elseif v['type'] == 'radical' then
+    --                baseWKSubject.color = {color.curiousBlue, 1.0}
+    --            elseif v['type'] == 'vocabulary' then
+    --                baseWKSubject.color = {color.gentooPurple, 1.0}
+    --            end
+    --            baseWKSubject.text = v['characters']
+    --            baseWKSubject.size = 14
+    --            currItem = currItem + 1
+    --        end
+    --        baseWKSubject.yc = startYc + ((i-1) * 20)
+    --        draw_text(cr, baseWKSubject)
+    --        i = i + 1
+    --    end
+    --end
+
 
     -- bars
     for i in pairs(bars) do
@@ -414,9 +467,11 @@ function do_new_weather(cr, updates)
                 --print('File exists: ' .. weather['weather'][1]['icon'] .. '@2x.png')
             elseif weather ~= nil and weather['weather'] ~= nil then 
                 run_cmd('wget -nc http://openweathermap.org/img/wn/' .. weather['weather'][1]['icon'] .. '@2x.png -O ' .. os.getenv("HOME") .. '/.config/gen2con/weather/' .. weather['weather'][1]['icon'] .. '@2x.png')
-                sunAmount(weather['sys']['sunrise'],  weather['sys']['sunset'], sun)
             end
 
+            if weather ~= nil and weather['weather'] ~= nil then
+                sunAmount(weather['sys']['sunrise'],  weather['sys']['sunset'], sun)
+            end
 
             -- get weather forecast
             curlCall = 'curl -s -H "Cache-Control: no-cache" "api.openweathermap.org/data/2.5/forecast?id=' .. sWeather.id .. '&units=' .. sWeather.units .. '&lang=' .. sWeather.lang ..  '&APPID=' .. OWMAPIKEY .. '"'
@@ -470,14 +525,14 @@ function do_new_weather(cr, updates)
 
             if (dIdx == 0) then
                 baseLine.y = baseLine.y - 10
-                baseLine.toy = baseLine.toy + 10
+                baseLine.toy = baseLine.toy + 2
             end
             draw_line(cr, baseLine)
 
 
             baseLine.y, baseLine.toy = cCenter.y + cHeight / 4 - 200, cCenter.y + cHeight / 4 + 200
             if (dIdx == 0) then
-                baseLine.y = baseLine.y - 10
+                baseLine.y = baseLine.y - 2
                 baseLine.toy = baseLine.toy + 10
             end
             draw_line(cr, baseLine)

@@ -137,6 +137,8 @@ yearKanji = '令和'
 --[[WaniKani]]--
 wkRevIcon = ''
 wkLesIcon = ''
+wkCritIcon = ''
+wkLevelIcon = ''
 
 --[[Battery]]--
 power = ''

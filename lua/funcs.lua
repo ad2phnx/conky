@@ -51,6 +51,102 @@ function parseWKDateToHour(wkDate)
     end
 end
 
+-- get wanikani review stats
+function getWKReviewStats(curl, json, wk)
+
+    -- Setup curl call
+    if (time.minutes % 10 == 0) then
+    else
+        wk.headers[4] = "If-Modified-Since: " .. wk.revStatLastModified
+    end
+    c = curl.easy {
+        url = wk.linkBase .. wk.linkReviewStats,
+        httpheader = wk.headers
+    }
+
+    t = {}
+    lastModified = ""
+    wk.headers[4] = nil
+
+    -- Perform curl lookup
+    c:perform({
+        headerfunction = function(str)
+            for k, v in str:gmatch("(Last%-Modified): (.*)\r\n") do
+                lastModified = v
+            end
+        end,
+        writefunction = function(str)
+            --print("Writing str to table: " .. str)
+            t[#t+1] = str
+        end
+    })
+
+    wkData = json.decode(table.concat(t))
+    newData = false
+    if wkData ~= nil then
+
+        local wkRevStats = wkData['data']
+
+        wk.revStatLastModified = lastModified
+        wk.idsSubjectLessThan = {}
+
+        for n, t in pairs(wkRevStats) do
+            wk.idsSubjectLessThan[#wk.idsSubjectLessThan+1] = t['data']['subject_id']
+        end
+
+
+        newData = true
+    end
+
+    return newData
+end
+
+-- get subjects that have poor percentages
+function getWKSubjectsLessThan(curl, json, wk)
+
+    -- Setup curl call
+    wk.headers[4] = nil
+    c = curl.easy {
+        url = wk.linkBase .. wk.linkSubjects,
+        httpheader = wk.headers
+    }
+
+    t = {}
+
+    -- Perform curl lookup
+    c:perform({
+        headerfunction = function(str)
+        end,
+        writefunction = function(str)
+            t[#t+1] = str
+        end
+    })
+
+    wkData = json.decode(table.concat(t))
+
+    newData = false
+    if wkData ~= nil then
+
+        local wkSubjects = wkData['data']
+        wk.infoSubjectLessThan = {}
+
+        for n, t in pairs(wkSubjects) do
+            local subInfo = {
+                type = t['object'],
+                characters = t['data']['characters'],
+                level = t['data']['level'],
+                meaning = t['data']['meanings'][1]['meaning'],
+            }
+            wk.infoSubjectLessThan[#wk.infoSubjectLessThan+1]= subInfo
+        end
+
+        newData = true
+    end
+
+    return newData
+end
+
+
 -- get wanikani summary
 function getWKSummary(curl, json, wk)
 
@@ -68,6 +164,7 @@ function getWKSummary(curl, json, wk)
 
   t = {}
   lastModified = ""
+  wk.headers[4] = nil
 
   -- Perform curl lookup
   c:perform({
@@ -119,44 +216,6 @@ function getWKSummary(curl, json, wk)
   return newData
 end
 
--- get wanikani reviews
-function getWKReviews(curl, json, wk)
-
-  -- Setup curl call
-  wk.headers["Etag"] = wk.etag
-  c = curl.easy {
-    url = wk.linkBase .. wk.linkReviewsAvail,
-    httpheader = wk.headers
-  }
-
-  t = {}
-
-  -- Perform curl lookup
-  c:perform({
-      headerfunction = function(str)
-        for k, v in str:gmatch("(Etag): (.*)\r\n") do
-          etag = v
-        end
-      end,
-      writefunction = function(str)
-        t[#t+1] = str
-      end
-  })
-
-  c:close()
-
-  wkData = json.decode(table.concat(t))
-
-  --print("wk.reviews: " .. wk.reviews .. ", wkData: " .. wkData["total_count"])
-  newReviews = false
-  if wk.reviews ~= wkData["total_count"] then
-    wk.reviews = wkData["total_count"]
-    newReviews = true
-  end
-
-  return newReviews
-end
-
 -- get wanikani user info
 function getWKUser(curl, json, wk)
   
@@ -174,6 +233,7 @@ function getWKUser(curl, json, wk)
 
   t = {}
   userLastModified = ""
+  wk.headers[4] = nil
 
   -- Perform curl lookup
   c:perform({
