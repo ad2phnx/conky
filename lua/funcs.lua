@@ -136,6 +136,7 @@ function getWKSubjectsLessThan(curl, json, wk)
                 characters = t['data']['characters'],
                 level = t['data']['level'],
                 meaning = t['data']['meanings'][1]['meaning'],
+                reading = t['data']['readings'][1]['reading'],
             }
             wk.infoSubjectLessThan[#wk.infoSubjectLessThan+1]= subInfo
         end

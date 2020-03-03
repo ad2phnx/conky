@@ -10,8 +10,8 @@ background = {
 -- base wk reviews with low percentage
 baseWKSubject = {
     text = '',
-    x = cCenter.x - 550,
-    yc = cCenter.y + 25,
+    xc = cCenter.x - 400,
+    yc = cCenter.y + 15,
     font = 'Kochi Mincho',
     face = CAIRO_FONT_WEIGHT_BOLD,
     size = 24,
@@ -254,7 +254,7 @@ texts = {
     font = 'SauceCode Pro Nerd Font Mono',
     size = 36,
     --color = wanikani.reviewsNow > 0 and {weekdayColor[time.weekday], 1} or {color.white, 0.75},
-    color = wanikani.reviewsNow > 0 and {color.gold, 1} or {color.white, 0.25},
+    color = {color.roseGold, 1},
   },
 
   {

@@ -137,12 +137,25 @@ function do_cpu(cr, updates)
     if wanikani.infoSubjectLessThan[1] ~= nil and (updates == 6 or updates % 60 == 0) then
         randomSubject = wanikani.infoSubjectLessThan[math.random(#wanikani.infoSubjectLessThan)]
     end
+    if randomSubject['type'] == 'radical' then
+        baseWKSubject.color = {color.curiousBlue, 1.0}
+    elseif randomSubject['type'] == 'kanji' then
+        baseWKSubject.color = {color.roseGold, 1.0}
+    elseif randomSubject['type'] == 'vocabulary' then
+        baseWKSubject.color = {color.gentooPurpleLight2, 1.0}
+    end
     baseWKSubject.text = randomSubject['characters'] ~= nil and randomSubject['characters'] or ''
     draw_text(cr, baseWKSubject)
-    baseWKSubject.text = randomSubject['meaning'] ~= nil and randomSubject['meaning'] .. ' (' .. randomSubject['level'] .. ')' or ''
+    baseWKSubject.text = randomSubject['reading'] ~= nil and randomSubject['reading'] or ''
+    baseWKSubject.size = 16
+    baseWKSubject.xc = nil
+    baseWKSubject.x = cCenter.x - 550
+    baseWKSubject.yc = cCenter.y + 45
+    draw_text(cr, baseWKSubject)
+    baseWKSubject.text = randomSubject['meaning'] ~= nil and randomSubject['meaning'] .. ' (L.' .. randomSubject['level'] .. ')' or ''
     baseWKSubject.x = nil
     baseWKSubject.xr = cCenter.x - 250
-    baseWKSubject.size = 14
+    baseWKSubject.size = 16
     baseWKSubject.font = 'Source Code Pro'
     draw_text(cr, baseWKSubject)
     --    while currItem <= 25 do
