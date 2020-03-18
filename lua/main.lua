@@ -155,7 +155,7 @@ function do_cpu(cr, updates)
     baseWKSubject.text = randomSubject['meaning'] ~= nil and randomSubject['meaning'] .. ' (L.' .. randomSubject['level'] .. ')' or ''
     baseWKSubject.x = nil
     baseWKSubject.xr = cCenter.x - 250
-    baseWKSubject.size = 16
+    baseWKSubject.size = 14
     baseWKSubject.font = 'Source Code Pro'
     draw_text(cr, baseWKSubject)
     --    while currItem <= 25 do
@@ -314,6 +314,9 @@ function do_music(cr, updates)
           os.execute('eyeD3 -l error ' .. os.getenv("HOME") .. '/Music/"' .. file .. '" --write-images ' .. os.getenv("HOME") .. '/.config/gen2con/covers/ &> /dev/null')
           if check_file(coverArt .. '.jpeg') then
             os.execute('convert ' .. coverArt .. '.jpeg ' .. coverArt .. '.png')
+          end
+          if check_file(coverArt .. '.jpg') then
+            os.execute('convert ' .. coverArt .. '.jpg ' .. coverArt .. '.png')
           end
           if check_file(coverArt .. '.png') then
             coverColor = '0x' .. get_con('convert "$HOME/.config/gen2con/covers/FRONT_COVER.png" -resize 1x1\\! -format "%[fx:int(255*r+.5)],%[fx:int(255*g+.5)],%[fx:int(255*b+.5)]" info:- | awk -F \'[(,)]\' \'{printf("#%x%x%x\\n",$1,$2,$3)}\' | sed "s/#//"')
